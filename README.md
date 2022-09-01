@@ -2,7 +2,7 @@
 
 Python data structures in MATLAB. Because I still want Python!
 
-Not official package, just public code for reference. `List` is `cellarray`, `Dict` is `containers.Map`.
+Not official package, just public code for reference. `List` is `cellarray`, `Dict` is nested `containers.Map`.
 
 More examples in `tests/`.
 
