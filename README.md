@@ -7,8 +7,7 @@ Not official package, just public code for reference. `List` is `cellarray`, `Di
 More examples in `tests/`.
 
 ```matlab
-List = @pyinmat.List;
-Dict = @pyinmat.Dict;
+[List, Dict] = pyinmat.get('List', 'Dict');
 ```
 
 ```matlab
