@@ -1,8 +1,8 @@
 # PyInMat
 
-Pythonic data structures in MATLAB. Because I still want Python!
+Python data structures in MATLAB. Because I still want Python!
 
-Not official package, just public code for reference.
+Not official package, just public code for reference. `List` is `cellarray`, `Dict` is `containers.Map`.
 
 More examples in `tests/`.
 
