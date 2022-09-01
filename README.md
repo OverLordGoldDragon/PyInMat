@@ -19,6 +19,7 @@ assert(lst(1) == 1 && lst(-1) == "dog");
 ```matlab
 dc = Dict(a=1, b=2); 
 dc(0) = "dog"; 
+assert(dc("b") == 2)
 assert(dc.pop("a") == 1)
 
 dc2 = Dict(c=3, d=Dict(d=4))
