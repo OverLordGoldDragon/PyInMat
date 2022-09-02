@@ -1,6 +1,6 @@
 # PyInMat
 
-Python data structures in MATLAB. Because I still want Python!
+Python data structures and methods in MATLAB. Because I still want Python!
 
 Not official package, just public code for reference. `List` is `cellarray`, `Dict` is nested `containers.Map`.
 
@@ -30,3 +30,15 @@ Display with `dc.pprint()`
 b=2, c=3, d=dict(d=4,),
 0='dog',
 ```
+
+### Other examples
+
+```matlab
+[ValueError, isin] = pyinmat.from_import('ValueError', 'isin');
+
+x = [1 2 "dog"];
+if isin("dog", x)
+    ValueError("doomed")
+end
+```
+
