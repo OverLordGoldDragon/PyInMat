@@ -19,13 +19,21 @@ function out = dict(varargin)
     % Show with
     %
     %    disp(dict2str(out))
-    out = containers.Map('UniformValues', false);
-    current_key = '';
-    for i=1:length(varargin)
-        if mod(i, 2)
-            current_key = varargin{i};
-        else
-            out(current_key) = varargin{i};
+
+    % {key: val} syntax, where `key` is numeric
+    if ~isempty(varargin) && isnumeric(varargin{1})
+        assert(numel(varargin) == 2)
+        out = containers.Map(varargin{1}, varargin{2}, 'UniformValues', false);
+    % key=val syntax
+    else
+        out = containers.Map('UniformValues', false);
+        current_key = '';
+        for i=1:length(varargin)
+            if mod(i, 2)
+                current_key = varargin{i};
+            else
+                out(current_key) = varargin{i};
+            end
         end
     end
 end

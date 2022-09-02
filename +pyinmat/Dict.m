@@ -33,14 +33,7 @@ classdef Dict < handle
     methods
         % initialization; call syntax -------------------------------------
         function self = Dict(varargin)
-            if ~isempty(varargin) && isnumeric(varargin{1})
-                assert(numel(varargin) == 2)
-                type_key = self.get_key_class(varargin{1});
-                init = containers.Map('KeyType', type_key, 'ValueType', 'any');
-                init(varargin{1}) = varargin{2};
-            else    
-                init = pyinmat.funcs.dict(varargin{:});
-            end
+            init = pyinmat.funcs.dict(varargin{:});
             self.data = pyinmat.funcs.dict();
             self.data(init.KeyType) = init;
         end
