@@ -44,4 +44,4 @@ end
 
 ### License
 
-[Unlicense!](https://unlicense.org/)
+[Unlicense](https://unlicense.org/)!
