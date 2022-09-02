@@ -25,7 +25,7 @@ end
 
 
 function out = default_exception(name)
-    E = Exception();
+    E = pyinmat.Exceptions();
     M = containers.Map();
     M('ValueError') = @E.ValueError;
     M('TypeError') = @E.TypeError;
