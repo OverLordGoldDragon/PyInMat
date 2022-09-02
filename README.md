@@ -42,3 +42,6 @@ if isin("dog", x)
 end
 ```
 
+### License
+
+[Unlicense!](https://unlicense.org/)
