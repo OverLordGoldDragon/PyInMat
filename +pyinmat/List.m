@@ -24,6 +24,7 @@ classdef List < handle
     %  - `lst.reversed() == [2, 1]` (returns copy of reversed list)
     %  - `lst.reverse()` -> `[2, 1]` (reverses the list; makes copy)
     %  - `lst.copy() == [1, 2]` (returns copy of list)
+    %  - `lst.toarr() == [1, 2]` (converts to array if possible)
     %  - `length`, `numel`, and `size` were overridden to operate upon `lst.data`,
     %     where stuff is stored
     %  - `end` indexing is forbidden since we can't propagate it to methods. 
@@ -129,6 +130,30 @@ classdef List < handle
             else
                 out = pyinmat.List();
                 out.data = d;
+            end
+        end
+
+        % quality of life ----------------------------------------------------
+        function out = toarr(self)
+            % TOARR Convert to array if possible. 
+            % If mixed type, only numeric currently supported, and will cast
+            % to double.
+            try
+                out = cell2mat(self.data);
+            catch
+                TypeError = imports('TypeError');
+                o = self.data;
+                for k=1:numel(o)
+                    v = o{k};
+                    if ~isnumeric(v)
+                        TypeError(...
+                            sprintf("mixed data must be numeric, got %s", ...
+                                    class(v))...
+                        )
+                    end
+                    o{k} = double(v);
+                end
+                out = cell2mat(o);
             end
         end
 
