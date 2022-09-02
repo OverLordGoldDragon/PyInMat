@@ -141,12 +141,11 @@ classdef List < handle
             try
                 out = cell2mat(self.data);
             catch
-                TypeError = imports('TypeError');
                 o = self.data;
                 for k=1:numel(o)
                     v = o{k};
                     if ~isnumeric(v)
-                        TypeError(...
+                        pyinmat.exceptions.TypeError(...
                             sprintf("mixed data must be numeric, got %s", ...
                                     class(v))...
                         )
@@ -197,6 +196,14 @@ classdef List < handle
                 end
             end
         end
+
+        function out = max(self)
+            out = max(self.toarr());
+        end
+
+        function out = min(self)
+            out = min(self.toarr());
+        end
     end
 
     methods (Access=private)
@@ -208,17 +215,5 @@ classdef List < handle
             end
         end
 
-    end
-end
-
-
-function varargout = imports(varargin)
-    M = containers.Map();
-    E = pyinmat.Exceptions();
-    M('TypeError') = @E.TypeError;
-   
-    varargout = cell(nargin, 1);
-    for k = 1:nargin
-        varargout{k} = M(varargin{k});
     end
 end

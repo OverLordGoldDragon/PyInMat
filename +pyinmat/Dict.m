@@ -33,16 +33,15 @@ classdef Dict < handle
     methods
         % initialization; call syntax -------------------------------------
         function self = Dict(varargin)
-            dict = imports('dict');
-
             if ~isempty(varargin) && isnumeric(varargin{1})
+                assert(numel(varargin) == 2)
                 type_key = self.get_key_class(varargin{1});
                 init = containers.Map('KeyType', type_key, 'ValueType', 'any');
                 init(varargin{1}) = varargin{2};
             else    
-                init = dict(varargin{:});
+                init = pyinmat.funcs.dict(varargin{:});
             end
-            self.data = dict();
+            self.data = pyinmat.funcs.dict();
             self.data(init.KeyType) = init;
         end
 
@@ -60,11 +59,7 @@ classdef Dict < handle
             end
 
             if x(1).type == "()" && length(x) == 1 && ~isempty(x.subs)
-                try
-                    self.setter(x.subs{1}, varargin{:});
-                catch
-                    self.setter(x.subs{1}, varargin{:});
-                end
+                self.setter(x.subs{1}, varargin{:});
             else
                 self = builtin('subsasgn', self, x, varargin{:});
             end
@@ -73,7 +68,6 @@ classdef Dict < handle
         % Python methods -----------------------------------------------------
         function out = get(self, key, alt)
             % GET If `key` is found, fetch its value, else return `alt`.
-            KeyError = imports('KeyError');
             try
                 out = self.getter(key);
             catch
@@ -81,7 +75,7 @@ classdef Dict < handle
                 if nargin == 3
                     out = alt;
                 else
-                    KeyError(key);
+                    pyinmat.exceptions.KeyError(key);
                 end
             end
         end
@@ -123,7 +117,6 @@ classdef Dict < handle
 
         function update(self, dsrc)
             % UPDATE Add keys and values from `dsrc` onto `self`.
-            isin = imports('isin');
 
             % iterate over all stored dicts and subdicts of `dsrc` and fetch keys
             % and values that come first, then set onto `self`
@@ -134,7 +127,7 @@ classdef Dict < handle
             for k=1:numel(type_keys)
                 % fetch type key, if not in `self` then add
                 type_key = type_keys{k};
-                if ~isin(type_key, data_.keys)
+                if ~pyinmat.funcs.isin(type_key, data_.keys)
                     data_(type_key) = dict();
                 end
                 
@@ -162,7 +155,6 @@ classdef Dict < handle
 
         function out = copy(self)
             % COPY Shallow copy of self.
-            dict = imports('dict');
 
             % iterate over all stored dicts and subdicts and fetch keys
             % and values that come first, then set onto newly initialized `Dict`.
@@ -189,13 +181,12 @@ classdef Dict < handle
         % quality of life ----------------------------------------------------
         function pprint(self)
             % PPRINT Prettily print all key-value pairs.
-            showdict = imports('showdict');
             data_ = self.data;
 
             type_keys = data_.keys;
             for k=1:numel(type_keys)
                 type_key = type_keys{k};
-                showdict(data_(type_key));
+                pyinmat.funcs.showdict(data_(type_key));
             end
         end
     end
@@ -208,7 +199,6 @@ classdef Dict < handle
                 key;
                 C.is_assigning = false;
             end
-            [KeyError, isin] = imports('KeyError', 'isin');
             data_ = self.data;
 
             key_class = self.get_key_class(key);
@@ -221,7 +211,7 @@ classdef Dict < handle
                 d = data_(key_class);
                 keys = d.keys;
                 if ~isempty(keys) && strcmp(class(keys{1}), key_class)
-                    if isin(key, keys)
+                    if pyinmat.funcs.isin(key, keys)
                         out = d(key);
                         found_key = true;
                     end
@@ -241,7 +231,7 @@ classdef Dict < handle
                     d(key) = [];  % will assign to in `set`
                     out = [];
                 else
-                    KeyError(key)
+                    pyinmat.exceptions.KeyError(key)
                 end
             end
         end
@@ -289,24 +279,4 @@ classdef Dict < handle
         end
     end
 
-end
-
-
-function varargout = imports(varargin)
-    M = containers.Map();
-    M('dict') = ...
-        pyinmat.gen_utils.dict;
-    M('dict2str') = ...
-        pyinmat.gen_utils.dict2str;
-    M('showdict') = ...
-        pyinmat.gen_utils.showdict;
-    M('KeyError') = ...
-        pyinmat.gen_utils.KeyError;
-    M('isin') = ...
-        pyinmat.gen_utils.isin;
-
-    varargout = cell(nargin, 1);
-    for k = 1:nargin
-        varargout{k} = M(varargin{k});
-    end
 end

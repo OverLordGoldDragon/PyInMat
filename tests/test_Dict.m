@@ -1,5 +1,5 @@
 Dict = @pyinmat.Dict;
-isin = pyinmat.gen_utils.isin;
+isin = pyinmat.funcs.isin;
 
 
 dc = Dict(a=1, b=2);
