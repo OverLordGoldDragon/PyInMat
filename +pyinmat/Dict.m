@@ -23,6 +23,9 @@ classdef Dict < handle
     %     out = dc.pop("cat", 3.14159);
     %     assert(out == 3.14159)
     %     dc.pprint()
+    %
+    %     dc = Dict(0, "dog");  % {0: "dog"} in Python
+    %     assert(dc(0) == "dog")
     properties
         data;
     end
@@ -31,8 +34,14 @@ classdef Dict < handle
         % initialization; call syntax -------------------------------------
         function self = Dict(varargin)
             dict = imports('dict');
-            
-            init = dict(varargin{:});
+
+            if ~isempty(varargin) && isnumeric(varargin{1})
+                type_key = self.get_key_class(varargin{1});
+                init = containers.Map('KeyType', type_key, 'ValueType', 'any');
+                init(varargin{1}) = varargin{2};
+            else    
+                init = dict(varargin{:});
+            end
             self.data = dict();
             self.data(init.KeyType) = init;
         end

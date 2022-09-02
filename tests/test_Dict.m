@@ -48,3 +48,7 @@ assert(~isin("dog", dc.keys()))
 
 % pprint
 dc.pprint()
+
+% {key: val} syntax
+dc = Dict(0, "dog");
+assert(dc(0) == "dog")
