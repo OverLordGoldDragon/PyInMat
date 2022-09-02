@@ -210,3 +210,15 @@ classdef List < handle
 
     end
 end
+
+
+function varargout = imports(varargin)
+    M = containers.Map();
+    E = pyinmat.Exceptions();
+    M('TypeError') = @E.TypeError;
+   
+    varargout = cell(nargin, 1);
+    for k = 1:nargin
+        varargout{k} = M(varargin{k});
+    end
+end
