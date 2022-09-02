@@ -206,23 +206,32 @@ classdef Dict < handle
             % iterate through all stored dictionaries; if key or key type
             % isn't found, throw error
             found_key = false;
-            found_key_type = (ismember(key_class, data_.keys));
+            found_key_type = (ismember(key_class, data_.keys));  % SLOW
             if found_key_type
                 d = data_(key_class);
                 keys = d.keys;
                 if ~isempty(keys) && strcmp(class(keys{1}), key_class)
-                    if pyinmat.funcs.isin(key, keys)
+                    if pyinmat.funcs.isin(key, keys)  % SLOW
                         out = d(key);
                         found_key = true;
                     end
                 end
             end
+              % somehow this is slower
+%             found_key_type = false;
+%             try
+%                 d = data_(key_class);
+%                 found_key_type = true;
+%                 out = d(key);
+%                 found_key = true;
+%             catch
+%                 %
+%             end
 
             if ~found_key
                 if C.is_assigning
                     % no match but we're assigning -> create new key / key type
                     if ~found_key_type
-
                         data_(key_class) = ...
                             containers.Map('KeyType', key_class, ...
                                            'ValueType', 'any');
