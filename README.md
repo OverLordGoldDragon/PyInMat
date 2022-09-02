@@ -21,7 +21,7 @@ dc(0) = "dog";
 assert(dc("b") == 2)
 assert(dc.pop("a") == 1)
 
-dc2 = Dict(c=3, d=Dict(d=4))
+dc2 = Dict(c=3, d=Dict(d=4));
 dc.update(dc2)
 assert(dc.get("cat", 3.14159) == 3.14159)
 ```
