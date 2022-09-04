@@ -17,6 +17,8 @@ assert_and_restore(lst == List(1, 2, 3, [1 2 3]), lsts)
 % extend
 lst.extend([-1 -2 -3])
 assert_and_restore(lst == List(1, 2, 3, -1, -2, -3), lsts)
+lst.extend(List(-1, -2, -3))
+assert_and_restore(lst == List(1, 2, 3, -1, -2, -3), lsts)
 
 % pop
 num = lst.pop();

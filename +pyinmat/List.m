@@ -63,8 +63,16 @@ classdef List < handle
         function extend(self, x)
             N = length(x);
             self.data{end + N} = [];
-            for k=1:N
-                self.data{end - N + k} = x(k);
+
+            % handle extending List by List separately
+            if contains(class(x), 'List')
+                for k=1:N
+                    self.data{end - N + k} = x.data{k};
+                end
+            else
+                for k=1:N
+                    self.data{end - N + k} = x(k);
+                end
             end
         end
 
