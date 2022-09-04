@@ -49,13 +49,34 @@ classdef List < handle
 
         function varargout = subsref(self, x)
             if x(1).type == "()" && length(x) == 1 && ~isempty(x.subs)
-                [varargout{1:nargout}] = self.get(x.subs{1});
+                [varargout{1:nargout}] = self.getter(x.subs{1});
             else
                 [varargout{1:nargout}] = builtin('subsref', self, x);
             end
         end
 
+        function self = subsasgn(self, x, varargin)
+            if isequal(self, [])
+                self = pyinmat.List.empty;
+            end
+
+            if x(1).type == "()" && length(x) == 1 && ~isempty(x.subs)
+                self.setter(x.subs{1}, varargin{:});
+            else
+                self = builtin('subsasgn', self, x, varargin{:});
+            end
+        end
+
         % basics -----------------------------------------------------------
+        function out = getter(self, idx)
+            idx = self.ensure_positive_idx(idx);
+            out = self.data{idx};
+        end
+
+        function setter(self, idx, value)
+            self.data{idx} = value;
+        end
+
         function append(self, x)
             self.data{end + 1} = x;
         end
@@ -74,11 +95,6 @@ classdef List < handle
                     self.data{end - N + k} = x(k);
                 end
             end
-        end
-
-        function out = get(self, idx)
-            idx = self.ensure_positive_idx(idx);
-            out = self.data{idx};
         end
 
         function out = pop(self, idx)
@@ -184,10 +200,10 @@ classdef List < handle
         function out = plus(a, b)
             out = pyinmat.List();
             for k=1:numel(a)
-                out.append(a.get(k));
+                out.append(a.getter(k));
             end
             for k=1:numel(b)
-                out.append(b.get(k));
+                out.append(b.getter(k));
             end
         end
 

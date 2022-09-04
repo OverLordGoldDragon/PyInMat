@@ -34,6 +34,8 @@ assert_and_restore(lst == List(1, 3), lsts)
 % indexing
 assert(lst(1) == 1)
 assert(lst(-1) == 3)
+lst(3) = -1;
+assert_and_restore(lst == List(1, 2, -1), lsts)
 
 % insert (also non-numeric)
 lst.insert(1, "yes")
