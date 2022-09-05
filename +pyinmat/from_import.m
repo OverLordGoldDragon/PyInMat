@@ -11,6 +11,10 @@ function varargout = from_import(varargin)
     M('ndim') = pyinmat.funcs.ndim;
     M('isin') = pyinmat.funcs.isin;
 
+    M('pystrip') = pyinmat.funcs.pystrip;
+    M('pylstrip') = pyinmat.funcs.pylstrip;
+    M('pyrstrip') = pyinmat.funcs.pyrstrip;
+
     M('ValueError') = pyinmat.exceptions.ValueError;
     M('TypeError') = pyinmat.exceptions.TypeError;
     M('KeyError') = pyinmat.exceptions.KeyError;

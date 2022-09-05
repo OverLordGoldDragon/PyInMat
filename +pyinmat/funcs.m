@@ -7,6 +7,10 @@ classdef funcs
         ifelse = @ifelse;
         ndim = @ndim;
         isin = @isin;
+
+        pystrip = @pystrip;
+        pylstrip = @pylstrip;
+        pyrstrip = @pyrstrip;
     end
 end
 
@@ -135,4 +139,82 @@ function out = isin(value, iter, C)
             break
         end
     end
+end
+
+
+% string methods -------------------------------------------------------------
+function out = pystrip(s, target, C)
+    % PYSTRIP MATLAB's `strip` extended to support multiple characters
+    arguments
+        s;
+        target;
+        C.side = "both";
+    end
+    assert(isin(C.side, {'left', 'right', 'both'}))
+    assert(isin(class(s), {'string', 'char'}))
+    orig_class = class(s);
+    s = join(string(s));
+    chars = char(s);
+    
+    % handle separately
+    if isin(C.side, {'left', 'both'})
+        chars = pystrip_(chars, target, "left");
+    end
+    if isin(C.side, {'right', 'both'})
+        chars = pystrip_(chars, target, "right");
+    end
+
+    % cast to original type
+    if strcmp(orig_class, "string")
+        out = string(chars);
+    else
+        out = chars;
+    end
+end
+
+
+function out = pylstrip(s, target)
+    % PYLSTRIP Python's `lstrip`
+    out = pystrip(s, target, side="left");
+end
+
+
+function out = pyrstrip(s, target)
+    % PYRSTRIP Python's `rstrip`
+    out = pystrip(s, target, side="right");
+end
+
+
+function out = pystrip_(chars, target, side)
+    % count from left
+    n_strip_left = 0;
+    if strcmp(side, 'left')
+        for k=1:numel(chars)
+            c = chars(k);
+            if contains(target, c)
+                n_strip_left = n_strip_left + 1;
+            else
+                break
+            end
+        end
+    end
+    % count from right
+    n_strip_right = 0;
+    if strcmp(side, 'right')
+        for k=1:numel(chars)
+            c = chars(end - k + 1);
+            if contains(target, c)
+                n_strip_right = n_strip_right + 1;
+            else
+                break
+            end
+        end
+    end
+
+    if n_strip_left > 0
+        chars = chars(n_strip_left + 1:end);
+    elseif n_strip_right > 0
+        chars = chars(1:end - n_strip_right);
+    end
+    out = chars;
 end

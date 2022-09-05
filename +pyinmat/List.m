@@ -74,6 +74,7 @@ classdef List < handle
         end
 
         function setter(self, idx, value)
+            idx = self.ensure_positive_idx(idx);
             self.data{idx} = value;
         end
 
@@ -227,6 +228,10 @@ classdef List < handle
 
         function out = min(self)
             out = min(self.toarr());
+        end
+
+        function out = isempty(self)
+            out = isempty(self.data);
         end
     end
 

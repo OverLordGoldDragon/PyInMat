@@ -5,6 +5,7 @@ classdef Dict < handle
     %
     % Supported Python methods: get, pop, update, keys, values, copy.
     % Additional methods: pprint.
+    % Overloaded MATLAB methods: isempty, remove
     %
     % Example: 
     % 
@@ -181,6 +182,15 @@ classdef Dict < handle
                 type_key = type_keys{k};
                 pyinmat.funcs.showdict(data_(type_key));
             end
+        end
+
+        % overloaded ---------------------------------------------------------
+        function out = isempty(self)
+            out = isempty(self.keys());
+        end
+
+        function remove(self, key)
+            self.pop(key);
         end
     end
 
