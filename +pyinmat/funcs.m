@@ -7,10 +7,13 @@ classdef funcs
         ifelse = @ifelse;
         ndim = @ndim;
         isin = @isin;
+        set_if_None = @set_if_None;
 
         pystrip = @pystrip;
         pylstrip = @pylstrip;
         pyrstrip = @pyrstrip;
+
+        np_linspace = @np_linspace;
     end
 end
 
@@ -142,6 +145,15 @@ function out = isin(value, iter, C)
 end
 
 
+function out = set_if_None(arg, alt)
+    if isequal(arg, "None")
+        out = alt;
+    else
+        out = arg;
+    end
+end
+
+
 % string methods -------------------------------------------------------------
 function out = pystrip(s, target, C)
     % PYSTRIP MATLAB's `strip` extended to support multiple characters
@@ -217,4 +229,21 @@ function out = pystrip_(chars, target, side)
         chars = chars(1:end - n_strip_right);
     end
     out = chars;
+end
+
+
+% numpy methods --------------------------------------------------------------
+function out = np_linspace(mn, mx, N, C)
+    % np_linspace `endpoint` support for `linspace`
+    arguments
+        mn;
+        mx;
+        N;
+        C.endpoint = true;
+    end
+    if C.endpoint
+        % end within one uniform increment of `mx`
+        mx = mx - (mx - mn) / N;
+    end
+    out = linspace(mn, mx, N);
 end

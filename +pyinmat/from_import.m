@@ -10,10 +10,13 @@ function varargout = from_import(varargin)
     M('ifelse') = pyinmat.funcs.ifelse;
     M('ndim') = pyinmat.funcs.ndim;
     M('isin') = pyinmat.funcs.isin;
+    M('set_if_None') = pyinmat.funcs.set_if_None;
 
     M('pystrip') = pyinmat.funcs.pystrip;
     M('pylstrip') = pyinmat.funcs.pylstrip;
     M('pyrstrip') = pyinmat.funcs.pyrstrip;
+
+    M('np_linspace') = pyinmat.funcs.np_linspace;
 
     M('ValueError') = pyinmat.exceptions.ValueError;
     M('TypeError') = pyinmat.exceptions.TypeError;

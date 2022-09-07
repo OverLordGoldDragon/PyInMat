@@ -189,6 +189,18 @@ classdef Dict < handle
             out = isempty(self.keys());
         end
 
+        function out = length(self)
+            out = length(self.keys());
+        end
+
+        function out = numel(self)
+            out = numel(self.keys());
+        end
+
+        function varargout = size(self, varargin)
+            [varargout{1:nargout}] = size(self.keys(), varargin{:});
+        end
+
         function remove(self, key)
             self.pop(key);
         end
